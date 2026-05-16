@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: #FAFAFA;
+  font-family: var(--font-sans);
+  direction: rtl;
+}
+
+/* Phone page layout */
+.phonePage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 16px;
+}
+
+.phoneLabel {
+  font-size: 12px;
+  color: #A3A3A3;
+  letter-spacing: 0.05em;
+  font-family: ui-monospace, monospace;
+  direction: ltr;
+}
+
+/* Scrollbar hiding */
+.noScrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.noScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Number overlay — masked over PNG text, transparent background */
+.overlayNumber {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background: transparent;
+  direction: ltr;
+  display: inline-block;
+}
+
+/* AI conversation overlay */
+.aiConversation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.aiBubbleUser {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border-radius: 18px 18px 4px 18px;
+  padding: 10px 14px;
+  font-size: 13px;
+  max-width: 80%;
+  backdrop-filter: blur(8px);
+  direction: rtl;
+}
+
+.aiBubbleAi {
+  align-self: flex-end;
+  background: rgba(255,255,255,0.9);
+  color: #1a1a1a;
+  border-radius: 18px 18px 18px 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  max-width: 85%;
+  direction: rtl;
+  line-height: 1.5;
+}
+
+.aiCursor {
+  display: inline-block;
+  animation: blink 0.7s steps(1) infinite;
+  color: #006FFD;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Mobile: no phone frame */
+@media (max-width: 767px) {
+  .phonePage {
+    padding: 0;
+    justify-content: flex-start;
+  }
+  .phoneLabel { display: none; }
+}
