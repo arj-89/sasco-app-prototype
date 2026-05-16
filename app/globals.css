@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-}
-
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -12,47 +8,52 @@
 
 html, body {
   height: 100%;
-  background: #FAFAFA;
-  font-family: var(--font-sans);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   direction: rtl;
 }
 
-/* Phone page layout */
+/* Page background — subtle depth behind the phone */
 .phonePage {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 24px 16px;
+  gap: 20px;
+  padding: 32px 24px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(84,168,171,0.07) 0%, transparent 70%),
+    linear-gradient(180deg, #f0f0f0 0%, #e8e8e8 100%);
 }
 
 .phoneLabel {
-  font-size: 12px;
-  color: #A3A3A3;
-  letter-spacing: 0.05em;
-  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: #A0A0A0;
+  letter-spacing: 0.08em;
+  font-family: ui-monospace, "SF Mono", monospace;
   direction: ltr;
+  user-select: none;
 }
 
-/* Scrollbar hiding */
+/* Scrollbar hiding for "more" screen */
 .noScrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-.noScrollbar::-webkit-scrollbar {
-  display: none;
-}
+.noScrollbar::-webkit-scrollbar { display: none; }
 
-/* Number overlay — masked over PNG text, transparent background */
+/* Number overlays (post-transaction) */
 .overlayNumber {
   font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-  background: transparent;
+  font-weight: 600;
+  color: #1a1a1a;
   direction: ltr;
   display: inline-block;
+  white-space: nowrap;
+  padding: 1px 4px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
 
 /* AI conversation overlay */
@@ -60,38 +61,42 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   overflow: hidden;
 }
 
 .aiBubbleUser {
   align-self: flex-start;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.18);
   color: #fff;
   border-radius: 18px 18px 4px 18px;
   padding: 10px 14px;
   font-size: 13px;
-  max-width: 80%;
-  backdrop-filter: blur(8px);
+  max-width: 82%;
+  backdrop-filter: blur(10px);
   direction: rtl;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .aiBubbleAi {
   align-self: flex-end;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.93);
   color: #1a1a1a;
   border-radius: 18px 18px 18px 4px;
   padding: 10px 14px;
   font-size: 13px;
-  max-width: 85%;
+  max-width: 86%;
   direction: rtl;
-  line-height: 1.5;
+  line-height: 1.55;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 
 .aiCursor {
   display: inline-block;
-  animation: blink 0.7s steps(1) infinite;
+  animation: blink 0.65s steps(1) infinite;
   color: #006FFD;
+  margin-right: 1px;
 }
 
 @keyframes blink {
@@ -99,11 +104,8 @@ html, body {
   50% { opacity: 0; }
 }
 
-/* Mobile: no phone frame */
+/* Mobile: fill viewport, no phone chrome */
 @media (max-width: 767px) {
-  .phonePage {
-    padding: 0;
-    justify-content: flex-start;
-  }
+  .phonePage { padding: 0; background: #000; }
   .phoneLabel { display: none; }
 }

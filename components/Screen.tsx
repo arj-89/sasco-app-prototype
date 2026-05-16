@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect } from "react";
 import { screens, type ScreenId } from "@/lib/flows";
 import { usePrototype } from "@/lib/state";
@@ -71,14 +70,19 @@ export default function Screen({ screenId, scale }: Props) {
     if (ov.kind === "animated-number") {
       let value = 0;
       let fmt: ((n: number) => string) | undefined;
+      // Only show balance/points overlays AFTER a transaction — before that the PNG already shows correct values
+      const showWalletOverlay = transactionDone;
+
       if (ov.value === "walletBalance") {
+        if (!showWalletOverlay) return null;
         value = walletBalance;
         fmt = (n) => n.toLocaleString("en", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       } else if (ov.value === "loyaltyPoints") {
+        if (!showWalletOverlay) return null;
         value = loyaltyPoints;
         fmt = (n) => Math.round(n).toLocaleString("en");
       } else if (ov.value === "txPoints") {
-        // Animate from 0 to 102 with bouncy easing
+        // Always show on tx-confirmed; animates 0→102 on mount
         value = transactionDone ? 102 : 0;
         fmt = (n) => String(Math.round(n));
       }
@@ -97,9 +101,7 @@ export default function Screen({ screenId, scale }: Props) {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-start",
-            overflow: "hidden",
-            background: "rgba(255,255,255,0.82)",
-            borderRadius: 4,
+            overflow: "visible",
           }}
         >
           <AnimatedNumber
@@ -173,13 +175,12 @@ export default function Screen({ screenId, scale }: Props) {
           scale={scale}
         >
           <div style={{ position: "relative", width: "100%", height: "100%" }}>
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={sheetScreenDef.image}
               alt={sheetScreenDef.id}
-              width={SCREEN_W}
-              height={sheetScreenDef.sheetHeight ?? 500}
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              priority
+              style={{ width: "100%", height: "100%", objectFit: "fill", display: "block" }}
+              draggable={false}
             />
             {/* Sheet overlays */}
             {sheetScreenDef.overlays?.map(renderOverlay)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/state";
 import PhoneFrame from "@/components/PhoneFrame";
 import Screen from "@/components/Screen";
@@ -12,6 +12,7 @@ const FRAME_PAD = 15;
 const FRAME_H = SCREEN_H + FRAME_PAD * 2;
 
 function useScale() {
+  const [ready, setReady] = useState(false);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -27,18 +28,19 @@ function useScale() {
         const byW = (window.innerWidth * 0.9) / (SCREEN_W + FRAME_PAD * 2);
         setScale(Math.min(byH, byW, 1));
       }
+      setReady(true);
     };
     calc();
     window.addEventListener("resize", calc);
     return () => window.removeEventListener("resize", calc);
   }, []);
 
-  return { scale, isMobile };
+  return { scale, isMobile, ready };
 }
 
 export default function Page() {
   const { currentScreen } = usePrototype();
-  const { scale, isMobile } = useScale();
+  const { scale, isMobile, ready } = useScale();
 
   const content = (
     <ScreenTransition screenKey={currentScreen}>
@@ -50,10 +52,11 @@ export default function Page() {
     return (
       <div
         style={{
-          width: SCREEN_W * scale,
-          height: SCREEN_H * scale,
+          width: "100vw",
+          height: "100dvh",
           position: "relative",
           overflow: "hidden",
+          opacity: ready ? 1 : 0,
         }}
       >
         {content}
@@ -62,7 +65,7 @@ export default function Page() {
   }
 
   return (
-    <div className="phonePage">
+    <div className="phonePage" style={{ opacity: ready ? 1 : 0, transition: "opacity 0.15s" }}>
       <PhoneFrame scale={scale}>
         <div
           style={{
